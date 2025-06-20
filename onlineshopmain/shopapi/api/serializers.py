@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Categories, NeworPopular
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,13 @@ class UserCreateSerailizer(serializers.ModelSerializer):
 #             name = validated_data['name'],
 #             password = validated_data['password']
 #         )
+
+class CategorySerailizer(serializers.ModelSerializer):
+    class Meta:
+        model = Categories
+        fields = '__all__'
+
+class NeworPuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NeworPopular
+        fields = '__all__'

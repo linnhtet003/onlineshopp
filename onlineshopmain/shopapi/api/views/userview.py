@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..models import CustomUser
 from ..serializers import UserSerializer, UserCreateSerailizer
 from rest_framework.response import Response
@@ -14,7 +14,7 @@ from rest_framework.permissions import AllowAny
 # Create your views here.
 
 class UserList(APIView):
-    authentication_classes = (TokenAuthentication,) # [TokenAuthentication]
+    authentication_classes = (JWTAuthentication,) # [JWTAuthentication]
     def get(self,request):
         users = CustomUser.objects.all()
         data = []
