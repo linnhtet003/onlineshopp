@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Categories, NeworPopular
+from .models import CustomUser, Categories, NeworPopular, Products
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,4 +34,26 @@ class CategorySerailizer(serializers.ModelSerializer):
 class NeworPuSerializer(serializers.ModelSerializer):
     class Meta:
         model = NeworPopular
+        fields = '__all__'
+
+class ProductsSerializer(serializers.ModelSerializer):
+    # popular_or_new = NeworPuSerializer(read_only = True)
+    # Use ID for writing
+    popular_or_new = serializers.PrimaryKeyRelatedField(
+        queryset = NeworPopular.objects.all(), write_only = True
+    )
+
+    # Use nested read-only for reading
+    popular_or_new_data = serializers.SerializerMethodField(read_only = True)
+    def get_popular_or_new_data(self, obj):
+        if obj.popular_or_new:
+            return{
+                "id": obj.popular_or_new.id,
+                "name": obj.popular_or_new.name,
+                "color": obj.popular_or_new.color,
+            }
+        return None
+
+    class Meta:
+        model = Products
         fields = '__all__'
