@@ -38,13 +38,24 @@ class NeworPuSerializer(serializers.ModelSerializer):
 
 class ProductsSerializer(serializers.ModelSerializer):
     # popular_or_new = NeworPuSerializer(read_only = True)
-    # Use ID for writing
+
     popular_or_new = serializers.PrimaryKeyRelatedField(
         queryset = NeworPopular.objects.all(), write_only = True
+    )       # Allows writing category using a Category ID (like category: 1).
+            # ✅ Used during POST/PUT (creating/updating a product).
+            # ❌ Not shown in GET responses.
+            # This allows clients to send something like:
+            # {
+            #   "popular_or_new": 2
+            # }
+
+    category = serializers.PrimaryKeyRelatedField(
+        queryset = Categories.objects.all(), write_only = True
     )
 
     # Use nested read-only for reading
-    popular_or_new_data = serializers.SerializerMethodField(read_only = True)
+    popular_or_new_data = serializers.SerializerMethodField(read_only = True)       # These fields are used to display nested, detailed info when sending data back to the client.
+    category_data = serializers.SerializerMethodField(read_only = True)
     def get_popular_or_new_data(self, obj):
         if obj.popular_or_new:
             return{
@@ -53,6 +64,15 @@ class ProductsSerializer(serializers.ModelSerializer):
                 "color": obj.popular_or_new.color,
             }
         return None
+
+    def get_category_data(self, obj): # this is define method       obj: A Products instance
+        if obj.category: # It accesses the related category object (ForeignKey).
+            return{
+                "id": obj.category.id,
+                "name": obj.category.name,
+            }
+        return None
+
 
     class Meta:
         model = Products
