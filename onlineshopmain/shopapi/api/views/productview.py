@@ -28,7 +28,6 @@ class ProductCreate(APIView):
 
 class ProductDetail(APIView):
     authentication_classes = (JWTAuthentication,)
-    permission_classes = [IsAdminUser]
     def get(self, request, pk):
         product = get_object_or_404(Products, pk=pk)
         serializers = ProductsSerializer(product)
