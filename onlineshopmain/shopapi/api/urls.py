@@ -1,12 +1,15 @@
 from django.urls import path
-from .views.userview import UserList, RegisterUser
+from .views.userview import UserList, RegisterUser, UserDetail, UserUpdate
 from .views.categoryview import Category, CategoryCreate, CategoryUpdate, CategoryDelete
 from .views.neworpopularview import neworpupular, neworpupularCreate, neworpupularUpdate, neworpupularDelete
 from .views.productview import ProductsList, ProductCreate, ProductDetail, ProductUpdate, ProductDelete
+from .views.reviewsview import ReviewList, ReviewCreate, ReviewDelete
 
 urlpatterns = [
     path('userlist/', UserList.as_view(), name='user_list'),
     path('register/', RegisterUser.as_view(), name='register_user'),
+    path('userdetail/', UserDetail.as_view(), name='user_detail'),
+    path('userupdate/', UserUpdate.as_view(), name='user_update'),
 
     # Category
     path('categorylist/', Category.as_view(), name='category_list'),
@@ -26,4 +29,10 @@ urlpatterns = [
     path('productdetail/<int:pk>/', ProductDetail.as_view(), name='product_update'),
     path('productupdate/<int:pk>/', ProductUpdate.as_view(), name='product_update'),
     path('productdelete/<int:pk>/', ProductDelete.as_view(), name='product_delete'),
+
+    # Reviews
+    path('reviewlist/', ReviewList.as_view(), name='review_list'),
+    path('reviewcreate/', ReviewCreate.as_view(), name='review_create'),
+    path('reviewdelete/<int:pk>/', ReviewDelete.as_view(), name='review_delete'),
+
 ]

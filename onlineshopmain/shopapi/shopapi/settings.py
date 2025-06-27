@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'api.CustomUser'
+DEFAULT_PROFILE_IMAGE = 'userprofile/avatar.svg'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

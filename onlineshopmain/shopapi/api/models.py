@@ -60,3 +60,13 @@ class Products(models.Model):
 
     class Meta:
         ordering= ['-updated_at', '-created_at']
+
+class Review(models.Model):
+    option = models.CharField(max_length=200)
+    message = models.TextField()
+    starrating = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='reviewuser')
+
+    class Meta:
+        ordering = ['-created_at']

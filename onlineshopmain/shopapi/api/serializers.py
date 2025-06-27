@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Categories, NeworPopular, Products
+from .models import CustomUser, Categories, NeworPopular, Products, Review
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,6 +10,11 @@ class UserCreateSerailizer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'name']
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'name', 'email', 'user_profile']
 
 # class UserCreateSerailizer(serializers.ModelSerializer):
 #     password = serializers.CharField(write_only=True)   # we never want to return it back in API responses, even after registration.
@@ -76,4 +81,27 @@ class ProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Products
+        fields = '__all__'
+
+class ReviewsSerializer(serializers.ModelSerializer):
+    created_by = serializers.PrimaryKeyRelatedField(
+        queryset = CustomUser.objects.all(),
+        write_only = True,
+        required = False
+    )
+
+    created_by_data = serializers.SerializerMethodField(read_only = True)
+    def get_created_by_data(self, obj):
+        request = self.context.get('request')
+        if obj.created_by:
+            profile_url = obj.created_by.user_profile.url if obj.created_by.user_profile else None  # user_profile is an ImageField.     .url gives the relative path to the image:
+            if request:
+                profile_url = request.build_absolute_uri(profile_url)   # build_absolute_uri() takes /media/userprofile/avatar.svg
+            return{
+                "id": obj.created_by.id,
+                "name": obj.created_by.name,
+                "user_profile": profile_url,
+            }
+    class Meta:
+        model = Review
         fields = '__all__'
