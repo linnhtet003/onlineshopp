@@ -4,6 +4,7 @@ from .views.categoryview import Category, CategoryCreate, CategoryUpdate, Catego
 from .views.neworpopularview import neworpupular, neworpupularCreate, neworpupularUpdate, neworpupularDelete
 from .views.productview import ProductsList, ProductCreate, ProductDetail, ProductUpdate, ProductDelete
 from .views.reviewsview import ReviewList, ReviewCreate, ReviewDelete
+from .views.orderview import OrderCreate
 
 urlpatterns = [
     path('userlist/', UserList.as_view(), name='user_list'),
@@ -34,5 +35,8 @@ urlpatterns = [
     path('reviewlist/', ReviewList.as_view(), name='review_list'),
     path('reviewcreate/', ReviewCreate.as_view(), name='review_create'),
     path('reviewdelete/<int:pk>/', ReviewDelete.as_view(), name='review_delete'),
+
+    # Order
+    path('ordercreate/', OrderCreate.as_view(), name='order_create'),
 
 ]

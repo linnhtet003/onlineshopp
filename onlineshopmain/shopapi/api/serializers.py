@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Categories, NeworPopular, Products, Review
+from .models import CustomUser, Categories, NeworPopular, Products, Review, Order
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,3 +105,9 @@ class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'name', 'phone', 'address', 'total_price', 'cart_items', 'created_at']
+        read_only_fields = ['user']
