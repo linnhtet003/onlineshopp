@@ -12,7 +12,16 @@ import os
 class ProductsList(APIView):
     authentication_classes = (JWTAuthentication,)
     def get(self, request):
+        search_query = request.GET.get('search', '')
+        category = request.GET.get('category', '')
         products = Products.objects.all().order_by("-updated_at")
+
+        if search_query:
+            products = products.filter(name__icontains=search_query)
+
+        if category:
+            products = products.filter(category__name__iexact=category)
+
         serializers = ProductsSerializer(products, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 

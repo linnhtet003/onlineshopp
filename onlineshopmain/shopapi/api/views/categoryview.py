@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404
 
 class Category(APIView):
     authentication_classes = (JWTAuthentication,)
-    permission_classes = [IsAdminUser]
     def get(self, request):
         categories = Categories.objects.all().order_by("-id")
         serializers = CategorySerailizer(categories, many=True)
