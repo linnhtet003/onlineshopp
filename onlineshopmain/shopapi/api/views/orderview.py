@@ -8,6 +8,14 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.shortcuts import get_object_or_404
 
+class OrderList(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        orders = Order.objects.all().order_by("-created_at")
+        serializers = OrderSerializer(orders, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
 class OrderCreate(APIView):
     # authentication_classes = (JWTAuthentication,)
     permission_classes = [IsAuthenticated]

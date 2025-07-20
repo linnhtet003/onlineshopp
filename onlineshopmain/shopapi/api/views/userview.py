@@ -23,7 +23,7 @@ class UserList(APIView):
         users = CustomUser.objects.all()
         data = []
         for user in users:
-            serializer = UserSerializer(user, context={"request", request})
+            serializer = UserSerializer(user, context={"request": request})
             data.append(serializer.data)
         return Response(data, status=status.HTTP_200_OK)
 

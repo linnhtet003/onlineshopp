@@ -107,7 +107,9 @@ class ReviewsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
+
     class Meta:
         model = Order
         fields = ['id', 'user', 'name', 'phone', 'address', 'total_price', 'cart_items', 'created_at']
-        read_only_fields = ['user']
+        # read_only_fields = ['user']
