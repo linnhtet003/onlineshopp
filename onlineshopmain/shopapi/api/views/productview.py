@@ -31,7 +31,7 @@ class ProductCreate(APIView):
     def post(self, request):
         serializers = ProductsSerializer(data = request.data, context = {"request": request})
         if serializers.is_valid():
-            serializers.save()
+            serializers.save(created_by=request.user)
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -54,7 +54,7 @@ class ProductUpdate(APIView):
             if os.path.isfile(product.p_image.path):
                 os.remove(product.p_image.path)
 
-        serializers = ProductsSerializer(product, data=request.data, context={"request": request})
+        serializers = ProductsSerializer(product, data=request.data, partial=True, context={"request": request})
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data)

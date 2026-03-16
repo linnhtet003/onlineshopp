@@ -29,6 +29,13 @@ class CategoryCreate(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CategoryDetail(APIView):
+    authentication_classes = (JWTAuthentication,)
+    def get(self, request, pk):
+        category = get_object_or_404(Categories, pk=pk)
+        serializers = CategorySerailizer(category)
+        return Response(serializers.data)
+
 class CategoryUpdate(APIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = [IsAdminUser]

@@ -30,13 +30,20 @@ class neworpupularCreate(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class neworpupularDetail(APIView):
+    authentication_classes = (JWTAuthentication,)
+    def get(self, request, pk):
+        neworpupularid = get_object_or_404(NeworPopular, pk=pk)
+        serializers = NeworPuSerializer(neworpupularid)
+        return Response(serializers.data)
+
 class neworpupularUpdate(APIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = [IsAdminUser]
     def put(self, request, pk):
         neworpo = get_object_or_404(NeworPopular, pk=pk)
         name = request.data.get('name')
-        if NeworPopular.objects.filter(name = name).exists():
+        if NeworPopular.objects.filter(name = name).exclude(pk=pk).exists():
             return Response({"error": "name is already had been exist"})
 
         serializers = NeworPuSerializer(neworpo, data=request.data, context={"request": request})

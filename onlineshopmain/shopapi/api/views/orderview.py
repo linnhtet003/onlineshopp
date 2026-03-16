@@ -47,3 +47,11 @@ class OrderCreate(APIView):
 
             return Response({"message": "Order placed successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderDetail(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [IsAdminUser]
+    def get(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        serializers = OrderSerializer(order)
+        return Response(serializers.data)
