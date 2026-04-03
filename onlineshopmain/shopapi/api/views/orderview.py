@@ -55,3 +55,46 @@ class OrderDetail(APIView):
         order = get_object_or_404(Order, pk=pk)
         serializers = OrderSerializer(order)
         return Response(serializers.data)
+
+class OrderUpdate(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [IsAdminUser]
+
+    def put(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+
+        cart_items = request.data.get('cart_items', [])
+
+        total_price = 0
+
+        # validate + calculate
+        for item in cart_items:
+            price = float(item.get('price', 0))
+            quantity = int(item.get('quantity', 0))
+
+            # stock check
+            product = get_object_or_404(Products, id=item.get('id'))
+            if quantity > product.stock:
+                return Response(
+                    {"error": f"Stock exceeded for {product.name}"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+            total_price += price * quantity
+
+        # save JSON directly
+        order.cart_items = cart_items
+        order.total_price = float(total_price)
+        order.save()
+
+        return Response({
+            "message" : "Order updated successfully",
+            "total_price": total_price
+        }, status=status.HTTP_200_OK)
+
+class OrderDelete(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [IsAdminUser]
+    def delete(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        order.delete()
+        return Response({"detail": f"{order.name} deleted successfully."})

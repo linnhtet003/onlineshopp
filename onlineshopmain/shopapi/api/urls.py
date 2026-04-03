@@ -4,7 +4,7 @@ from .views.categoryview import Category, CategoryCreate, CategoryDetail, Catego
 from .views.neworpopularview import neworpupular, neworpupularCreate, neworpupularDetail, neworpupularUpdate, neworpupularDelete
 from .views.productview import ProductsList, ProductCreate, ProductDetail, ProductUpdate, ProductDelete
 from .views.reviewsview import ReviewList, ReviewCreate, ReviewDelete
-from .views.orderview import OrderCreate, OrderList, OrderDetail
+from .views.orderview import OrderCreate, OrderList, OrderDetail, OrderUpdate, OrderDelete
 
 urlpatterns = [
     path('userlist/', UserList.as_view(), name='user_list'),
@@ -42,4 +42,6 @@ urlpatterns = [
     path('ordercreate/', OrderCreate.as_view(), name='order_create'),
     path('orderlist/', OrderList.as_view(), name='order-list'),
     path('orderdetail/<int:pk>/', OrderDetail.as_view(), name='order_detail'),
+    path('orderupdate/<int:pk>/', OrderUpdate.as_view(), name='order_update'),
+    path('orderdelete/<int:pk>/', OrderDelete.as_view(), name='order_delete'),
 ]

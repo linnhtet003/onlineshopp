@@ -29,5 +29,9 @@ class ReviewDelete(APIView):
     permission_classes = [IsAdminUser]
     def delete(self, request, pk):
         review = get_object_or_404(Review, pk=pk)
+
+        user_name = review.created_by.name
+
         review.delete()
-        return Response({"detail": f"{review.created_by_data.name} deleted successfully."})
+
+        return Response({"detail": f"{user_name} deleted successfully."})
